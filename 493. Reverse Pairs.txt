@@ -1,0 +1,64 @@
+class Solution {
+public:
+int c=0;
+void merge(vector<int> &skill, int low, int mid, int high) {
+    vector<int> temp;
+    int left=low;
+    int right=mid+1;
+    while(left<=mid && right<=high)
+    {
+        if(skill[left]>skill[right])
+        {temp.push_back(skill[right]);
+           // if(skill[right]>(2*skill[left]))
+          //  c=mid-left+1;
+            right++;
+        }
+        else 
+        {temp.push_back(skill[left]);
+        left++;}
+        // else{
+        //     temp.push_back(skill[left]);
+        //     left++;
+        //     right++;
+        // }
+    }
+        while(left<=mid){
+            temp.push_back(skill[left++]);
+        }
+        while(right<=high)
+        {
+            temp.push_back(skill[right++]);
+        }
+        for(int i=low;i<=high;i++)
+        {
+            skill[i]=temp[i-low];
+        }
+    
+}
+void countPairs(vector<int> &skill, int low, int mid, int high) {
+    int right=mid+1;
+    for(int i=low;i<=mid;i++)
+    {
+        while(right<=high && skill[i]>2*skill[right])
+        {
+            right++;
+        }
+        c+=right-mid-1;
+    }
+}
+void mergesort(vector<int>& skill,int low,int high)
+{
+    if(low>=high)
+    return;
+    int mid=(low+high)/2;
+    mergesort(skill, low, mid);
+    mergesort(skill,mid+1,high);
+    countPairs(skill,low,mid,high);
+    merge(skill,low,mid,high);
+}
+    int reversePairs(vector<int>& nums) {
+        int n=nums.size();
+        mergesort(nums,0,n-1);
+        return c;
+    }
+};
